@@ -4,9 +4,8 @@ from statistics import median
 
 from thefuzz import process
 
-from movie_storage_API import get_movie_details
-import movie_storage_sql as storage
-
+from movie_storage.movie_storage_API import get_movie_details
+from movie_storage import movie_storage_sql as storage
 
 HTML_FILE_PATH = "_static/index_template.html"
 GENERATE_HTML_WEBSITE = "_static/index.html"
