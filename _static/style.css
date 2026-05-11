@@ -27,16 +27,25 @@ body {
 }
 
 .movie {
+  position: relative; /* THIS IS THE KEY FIX */
+  display: inline-block; /* Or use flex in the parent container */
   width: 140px;
+  margin: 20px;
+  text-align: center;
 }
 
 .movie-title,
+.movie-rating,
 .movie-year {
   font-size: 0.8em;
   text-align: center;
 }
 
 .movie-title {
+  margin-top: 10px;
+}
+
+.movie-rating {
   margin-top: 10px;
 }
 
@@ -49,4 +58,28 @@ body {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     width: 128px;
     height: 193px;
+}
+
+.tooltip {
+    position: absolute;
+    top: 50px;       /* Adjust height relative to the poster */
+    left: 50%;      /* Places it to the right of the poster */
+    margin-left: 10px;
+
+    background: white;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+
+    /* Hover logic */
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+
+    z-index: 100;         /* Higher number = closer to the user */
+}
+
+/* Show it when the poster is hovered */
+.movie-poster:hover + .tooltip {
+    opacity: 1;
 }
