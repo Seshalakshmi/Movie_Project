@@ -12,6 +12,12 @@ GENERATE_HTML_WEBSITE = "_static/index.html"
 
 ######################## HELPER FUNCTIONS ##############################
 def get_valid_rating():
+    """
+        Prompt the user for a valid movie rating between 0 and 10.
+
+        Returns:
+            float: A validated rating value.
+    """
     while True:
         try:
             rating = float(input("\033[34mEnter movie rating (0-10): \033[0m"))
@@ -23,6 +29,15 @@ def get_valid_rating():
 
 
 def get_valid_movie_name(movie_database):
+    """
+        Prompt the user for a unique movie name.
+
+        Args:
+            movie_database (dict): Existing movie database to check duplicates.
+
+        Returns:
+            str: A validated, non-duplicate movie name.
+    """
     while True:
         name = input("\033[34mEnter movie name: \033[0m").strip()
         if not name:
@@ -35,6 +50,12 @@ def get_valid_movie_name(movie_database):
 
 
 def get_minimum_rating():
+    """
+        Prompt the user for an optional minimum rating filter.
+
+        Returns:
+            float | str: Minimum rating or empty string if not provided.
+    """
     while True:
         try:
             minimum_rating = input(
@@ -51,6 +72,12 @@ def get_minimum_rating():
 
 
 def get_start_year():
+    """
+        Prompt the user for an optional start year filter.
+
+        Returns:
+            int | str: Start year or empty string if not provided.
+    """
     while True:
         start_year = input(
                 "Enter start year (leave blank for no start year): ")
@@ -66,6 +93,12 @@ def get_start_year():
 
 
 def get_end_year():
+    """
+        Prompt the user for an optional end year filter.
+
+        Returns:
+            int | str: End year or empty string if not provided.
+    """
     while True:
         end_year = input(
             "Enter end year (leave blank for no end year): ")
@@ -82,6 +115,15 @@ def get_end_year():
 
 
 def serialization_movie(movie_database):
+    """
+        Convert movie database entries into HTML list items.
+
+        Args:
+            movie_database (dict): Movie database.
+
+        Returns:
+            str: Serialized HTML string representing movies.
+    """
     output = [f'''<li class="movie">
                 <div>
                 <img class="movie-poster" src="{details["poster"]}">
@@ -102,8 +144,10 @@ def serialization_movie(movie_database):
 
 def exit_app(user_id):
     """
-       Exit the application gracefully.
-       Prints a goodbye message to the console and exits the Python program.
+    Exit the application gracefully.
+
+    Args:
+        user_id (int): Current user ID.
     """
     user_name = storage.get_user_name(user_id)
     for u_name in user_name.values():
@@ -113,6 +157,12 @@ def exit_app(user_id):
 
 
 def list_of_movies(user_id):
+    """
+        Print all movies belonging to the user.
+
+        Args:
+            user_id (int): Current user ID.
+    """
     movie_database = storage.list_movies(user_id)
 
     if movie_database:
@@ -127,8 +177,19 @@ def list_of_movies(user_id):
 
 
 def get_movie_data(user_id):
+    """
+        Fetch and prepare movie metadata from external API.
+
+        Args:
+            user_id (int): Current user ID.
+
+        Returns:
+            tuple: (title, year, rating, poster URL)
+    """
     movie_database = storage.list_movies(user_id)
+
     new_movie = get_valid_movie_name(movie_database)
+
     fetch_movie_details = get_movie_details(new_movie)
     movie_title = fetch_movie_details.get('Title', 0)
     movie_year = fetch_movie_details.get('Year', 0)
@@ -140,6 +201,12 @@ def get_movie_data(user_id):
 
 
 def add_movie(user_id):
+    """
+        Add a new movie to the database or link it to an existing entry.
+
+        Args:
+            user_id (int): Current user ID.
+    """
     movie_database = storage.list_all_movies()
     new_movie, new_movie_year, new_movie_rating, new_movie_poster \
         = get_movie_data(user_id)
@@ -160,6 +227,12 @@ def add_movie(user_id):
 
 
 def delete_movie(user_id):
+    """
+        Delete a movie from the user's collection.
+
+        Args:
+            user_id (int): Current user ID.
+    """
     movie_database = storage.list_movies(user_id)
     if not movie_database:
         print("There is no data to delete the movie")
@@ -181,8 +254,13 @@ def delete_movie(user_id):
     print(f"Movie {movie_name_delete} successfully deleted")
 
 
-
 def update_movie(user_id):
+    """
+        Update a movie note in the database.
+
+        Args:
+            user_id (int): Current user ID.
+    """
     movie_database = storage.list_movies(user_id)
     if not movie_database:
         print("There is no data to update the movie")
@@ -203,6 +281,12 @@ def update_movie(user_id):
 
 
 def stats(user_id):
+    """
+        Display statistical analysis of the movie collection.
+
+        Args:
+            user_id (int): Current user ID.
+    """
     movie_database = storage.list_movies(user_id)
     if not movie_database:
         print("There is no data about movies")
@@ -231,6 +315,12 @@ def stats(user_id):
 
 
 def random_movie(user_id):
+    """
+        Select and display a random movie from the user's collection.
+
+        Args:
+            user_id (int): Current user ID.
+    """
     movie_database = storage.list_movies(user_id)
     if not movie_database:
         print("There is no data about movies")
@@ -243,6 +333,14 @@ def random_movie(user_id):
 
 
 def search_movie(user_id):
+    """
+        Search for a movie by name or partial match.
+
+        Uses fuzzy matching to suggest similar titles if an exact match is not found.
+
+        Args:
+            user_id (int): Current user ID.
+    """
     movie_database = storage.list_movies(user_id)
     if not movie_database:
         print("There is no data about movies")
@@ -274,6 +372,14 @@ def search_movie(user_id):
 
 
 def sort_by_rating(user_id):
+    """
+        Display movies sorted by rating in descending order.
+
+        Args:
+            user_id (int): Current user ID.
+
+        Returns:
+    """
     movie_database = storage.list_movies(user_id)
     if not movie_database:
         print("There is no data about movies")
@@ -288,6 +394,14 @@ def sort_by_rating(user_id):
 
 
 def sort_by_year(user_id):
+    """
+        Display movies sorted by release year.
+
+        Allows user to choose ascending or descending order.
+
+        Args:
+            user_id (int): Current user ID.
+    """
     movie_database = storage.list_movies(user_id)
     if not movie_database:
         print("There is no data about movies")
@@ -319,6 +433,17 @@ def sort_by_year(user_id):
 
 
 def filter_movies(user_id):
+    """
+        Filter movies based on optional criteria such as rating and year range.
+
+        Users can filter by:
+        - Minimum rating
+        - Start year
+        - End year
+
+        Args:
+            user_id (int): Current user ID.
+    """
     movie_database = storage.list_movies(user_id)
     if not movie_database:
         print("There is no data about movies")
@@ -373,6 +498,14 @@ def filter_movies(user_id):
 
 
 def generate_website(user_id):
+    """
+       Generate a static HTML website representing the user's movie collection.
+
+       Reads an HTML template, injects movie data, and writes the output to a file.
+
+       Args:
+           user_id (int): Current user ID.
+    """
     movie_database = storage.list_movies(user_id)
     user_detail = storage.get_user_name(user_id)
     user_name = {}
@@ -395,12 +528,28 @@ def generate_website(user_id):
     print("Website was generated successfully.")
 
 def create_user():
+    """
+        Create a new user in the system.
+
+        Prompts for username and password, then stores the user in the database.
+
+        Returns:
+            int: Newly created user ID.
+    """
     user_name = input("Enter user name: ")
     password = input("Enter new password: ")
     user_id = storage.add_users(user_name, password)
     return user_id
 
 def movie_suggestion(user_id):
+    """
+        Display the main menu and handle user interaction for movie operations.
+
+        Provides options such as adding, deleting, searching, and analyzing movies.
+
+        Args:
+            user_id (int): Current user ID.
+    """
     while True:
         print("\n\033[35mMenu: \n"
               "0. Exit \n"
@@ -452,6 +601,12 @@ def movie_suggestion(user_id):
 
 
 def main():
+    """
+        Entry point of the application.
+
+        Displays available users, allows user selection or creation,
+        and starts the movie management menu loop.
+    """
     first_line = '*' * 10
     print(f"{first_line} My Movies Database {first_line}")
 
