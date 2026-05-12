@@ -1,7 +1,10 @@
+import os
 from sqlalchemy import create_engine, text
 
-
-engine = create_engine("sqlite:///./data/movies.db", pool_pre_ping=True)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH = os.path.join(BASE_DIR, "data", "movies.db")
+DATABASE_URL = f"sqlite:///{DB_PATH}"
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 
 # Create the movies table if it does not exist

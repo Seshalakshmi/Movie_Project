@@ -30,8 +30,6 @@ body {
   position: relative; /* THIS IS THE KEY FIX */
   display: inline-block; /* Or use flex in the parent container */
   width: 140px;
-  margin: 20px;
-  text-align: center;
 }
 
 .movie-title,
