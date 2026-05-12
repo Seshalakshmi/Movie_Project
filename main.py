@@ -4,7 +4,7 @@ from statistics import median
 
 from thefuzz import process
 
-from movie_storage.movie_storage_API import get_movie_details
+from movie_storage.movie_storage_API import get_movie_details, get_movie_link
 from movie_storage import movie_storage_sql as storage
 
 HTML_FILE_PATH = "_static/index_template.html"
@@ -124,16 +124,17 @@ def serialization_movie(movie_database):
         Returns:
             str: Serialized HTML string representing movies.
     """
-    output = [f'''<li class="movie">
-                <div>
+    output = [f'''<div class="movie">
+                <span>
+                <a href="{get_movie_link(details["title"])}" target="_blank">
                 <img class="movie-poster" src="{details["poster"]}">
                 {f'<div class="tooltip">{details["note"]}</div>' 
     if details.get("note") and details["note"] != "None" else ''}
+                </span>
                 <div class="movie-title">{details["title"]}</div>
                 <div class="movie-rating">IMDB Rating: {details["rating"]}</div>
                 <div class="movie-year">{details["year"]}</div>
-                </div>
-            </li>
+            </div>
             ''' for movie, details in movie_database.items()]
 
     return '\n'.join(output)

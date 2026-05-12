@@ -31,3 +31,12 @@ def get_movie_details(movie_name):
 
     return None
 
+def get_movie_link(movie_name):
+    data = get_movie_details(movie_name)
+    if data.get("Response") == "True":
+        imdb_id = data["imdbID"]
+        imdb_link = f"https://www.imdb.com/title/{imdb_id}/"
+
+        return imdb_link
+    else:
+        return "Error:", data.get("Error")
